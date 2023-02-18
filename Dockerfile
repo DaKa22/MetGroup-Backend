@@ -6,7 +6,8 @@ COPY ./app/package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY ./app /app
+COPY ./docker/.env ./.env
 
 EXPOSE 3000
 
