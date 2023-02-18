@@ -3,10 +3,10 @@ import { create, findById, getAll, remove, update } from '../controllers/storeCo
 
 const router = Router()
 
-router.get('/store', getAll)
-router.get('/store/:id', findById)
-router.post('/store',  create)
-router.put('/store/:id', update)
-router.delete('/store/:id', remove)
+router.get('/stores', getAll)
+router.get('/stores/:id', findById)
+router.post('/stores',  create)
+router.put('/stores/:id', update)
+router.delete('/stores/:id', remove)
 
 export default router

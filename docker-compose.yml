@@ -4,14 +4,14 @@ services:
       build:
         context: .
         dockerfile: Dockerfile
-      image: docker.pkg.github.com/guadalupemgroup/mcfv2.0-backend/backend_metgroup:latest
+      image: docker.pkg.github.com/daka22/metgroup-backend/backend_metgroup:latest
       container_name: backend_metgroup
       restart: always
       networks:
           - network_privated
           - proxy
       depends_on:
-          - rolo_postgres
+          - postgres_metgroup
   postgres_metgroup:
       image: 'postgres:12.9'
       container_name: postgres_metgroup
@@ -22,17 +22,16 @@ services:
           POSTGRES_PASSWORD: 'admin'
           POSTGRES_HOST_AUTH_METHOD: 'md5'
       volumes:
-          - 'rolo_db:/var/lib/postgresql/data'
+          - 'postgres_metgroup_db:/var/lib/postgresql/data'
       networks:
           - network_privated
 networks:
     network_privated:
         driver: bridge
-        name: network_privated
     proxy:
         driver: bridge
         name: proxy
         external: true
 
 volumes:
-  rolo_db:
+  postgres_metgroup_db:
