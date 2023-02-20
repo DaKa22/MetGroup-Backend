@@ -1,6 +1,6 @@
 import { User } from '../models/User.js'
-import { Store } from '../models/Store.js'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 export const getAll = async (req, res) => {
   try {
@@ -19,9 +19,10 @@ export const getAll = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-    const { name, last_name, email, password, avatar } = req.body
-    const register = await User.findOne({ where: { email: email } })
-    if (!register) {
+    const { name, email, password } = req.body
+    const register = await User.findOne({ where: { email } })
+    console.log(register)
+    if (!register && register != null) {
       res.status(400).send({
         message: 'User already exists'
       })
@@ -30,10 +31,8 @@ export const create = async (req, res) => {
 
     const newUser = await User.create({
       name,
-      last_name,
       email,
       password: bcrypt.hashSync(password, 10),
-      avatar,
     })
     res.status(200).send({
       message: 'User created successfully',
@@ -49,14 +48,12 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, last_name, password, avatar } = req.body;
+    const { name, password } = req.body;
     const userUpdate = await User.findByPk(id)
 
     userUpdate.update({
       name,
-      last_name,
       password,
-      avatar
     })
 
     if (userUpdate) {
@@ -66,7 +63,7 @@ export const update = async (req, res) => {
       })
       return
     }
-    
+
     res.status(400).send({
       message: 'User not found'
     })
@@ -100,7 +97,7 @@ export const remove = async (req, res) => {
 
 export const findById = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id, { include: [Store] });
+    const user = await User.findByPk(req.params.id);
     if (!user) {
       res.status(400).send({
         message: 'User not found'
@@ -125,6 +122,7 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
+    // console.log(user)
     if (!user) {
       res.status(400).send({
         message: 'User not found'
@@ -134,9 +132,15 @@ export const loginUser = async (req, res) => {
 
     const passwordIsValid = bcrypt.compareSync(password, user.password);
     if (passwordIsValid) {
+      let keyJwt = process.env.KEY_JWT
+      let data = {
+        time: Date(), userId: user.id
+      }
       res.status(200).send({
         message: 'User logged successfully',
-        data: user
+        data: user,
+        token: jwt.sign(data, keyJwt),
+
       })
       return
     }

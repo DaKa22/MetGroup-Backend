@@ -1,10 +1,8 @@
 import { Store } from '../models/Store.js'
-import { User } from '../models/User.js'
-import { Article } from '../models/Article.js'
 
 export const getAll = async (req, res) => {
   try {
-    const stores = await Store.findAll({ include: User })
+    const stores = await Store.findAll()
     res.status(200).send({
       message: 'Stores retrieved successfully',
       data: stores
@@ -18,7 +16,7 @@ export const getAll = async (req, res) => {
 
 export const findById = async (req, res) => {
   try {
-    const store = await Store.findByPk(req.params.id, { include: Article })
+    const store = await Store.findByPk(req.params.id)
     if (!store) {
       res.status(400).send({
         message: 'Store not found'

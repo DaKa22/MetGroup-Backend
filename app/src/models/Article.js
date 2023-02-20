@@ -11,10 +11,7 @@ export const Article = sequelize.define('articles', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  description: {
-    type: DataTypes.STRING,
-  },
-  image: {
-    type: DataTypes.STRING,
+  precio: {
+    type: DataTypes.INTEGER,
   },
 })

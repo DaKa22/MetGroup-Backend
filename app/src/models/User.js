@@ -11,9 +11,6 @@ export const User = sequelize.define('users', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  last_name: {
-    type: DataTypes.STRING,
-  },
   email: {
     type: DataTypes.STRING,
     unique: true,
@@ -25,7 +22,4 @@ export const User = sequelize.define('users', {
   password: {
     type: DataTypes.STRING,
   },
-  avatar: {
-    type: DataTypes.STRING,
-  }
 })
